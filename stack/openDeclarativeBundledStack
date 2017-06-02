@@ -1,0 +1,35 @@
+% OPEN DECLARATIVE BUNDLED
+local  S2 S3 S4 S S5 S6 Val Val2 in
+   local NewStack StackObject in
+      fun {StackObject S}
+	 local
+	    fun {Push E} {StackObject E|S} end
+	    fun {Pop ?E}
+	       case S of X|S1 then E=X {StackObject S1} end end
+	    fun {IsEmpty} S==nil end
+	 in stack(push:Push pop:Pop isEmpty:IsEmpty data:S)
+	 end
+      end
+      
+      fun {NewStack} {StackObject nil} end   
+      S = {NewStack}
+      S2 = {S.push 4}
+      S3 = {S2.push 10}
+      S4 = {S3.pop Val}
+   try
+      S5 = {StackObject [1 2 3]}
+	  S6 = {S5.pop Val2} % Vale!
+      catch Exc then
+	 {Browse Exc}
+      end
+      {Browse S.data}
+      {Browse S2.data}
+      {Browse S3.data}
+      {Browse Val}
+      {Browse S4.data}
+      {Browse Val2}
+      {Browse S5.data}
+   end
+end
+
+

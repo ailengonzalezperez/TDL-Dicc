@@ -1,0 +1,28 @@
+% OPEN STATEFUL UNBUNDLED
+
+local Stack S C2 Val Val2 in
+   local
+      fun {NewStack} {NewCell nil} end
+      proc {Push C E} C:= E|@C  end
+      proc {Pop C ?E} case @C of X|S1 then E=X C:=S1 end end
+      fun {IsEmpty C} @C==nil end
+   in
+      Stack=stack(new:NewStack push:Push pop:Pop isEmpty:IsEmpty)
+   end
+   S = {Stack.new}
+   {Browse @S}
+   {Stack.push S 4}
+   {Browse @S}
+   {Stack.push S 10}
+   {Browse @S}
+   {Stack.pop S Val}
+   {Browse Val}
+   {Browse @S}
+   C2 = {NewCell [3 14 10 9 8]}
+   {Browse @C2}
+   {Stack.pop C2 Val2}
+   {Browse @C2}
+   {Browse Val2}
+   
+end
+

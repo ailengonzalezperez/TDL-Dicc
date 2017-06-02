@@ -1,0 +1,35 @@
+% OPEN STATEFUL BUNDLED
+
+local NewStack S Val Val2 R in
+   fun {NewStack}
+      C = {NewCell nil}
+      proc {Push E} C:=E|@C end
+      fun {Pop} case @C of X|S1 then C:=S1 X end end
+      fun {IsEmpty} @C==nil end
+   in
+      stack(push:Push pop:Pop isEmpty:IsEmpty data:C)
+   end
+   
+   S = {NewStack}
+   R = S.data
+  {Browse @R}
+   {S.push 4}
+   {Browse @R}
+   {S.push 10}
+   {Browse @R}
+   Val = {S.pop}
+   {Browse Val}
+   {Browse @R}
+   try
+      skip
+      R:= 14|10|20|@R
+      {Browse @R}
+      {S.pop Val2} % Vale!
+      {Browse Val2}
+      catch Exc then
+	 {Browse Exc}
+      end
+end
+
+
+
