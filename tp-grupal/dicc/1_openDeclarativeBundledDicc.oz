@@ -6,21 +6,21 @@ local  D2 D3 D4 D Val  in
             tree(key:K value:V left:L right:R)
          end
          fun {Insert K V T}
-            {Show T}
             case T of nil then {Tree K V nil nil}
-               [] tree(Y W L R) andthen K==Y then 
+               [] tree(key:Y value:W left:L right:R) andthen K==Y then 
                   case W of nil then {Tree Y V L R}
                   else {Tree Y W|V L R}
                   end
-               [] tree(Y W L R) andthen K<Y then {Tree Y W {Insert K V L} R}
-               [] tree(Y W L R) andthen K>Y then {Tree Y W L {Insert K V R}}
+               [] tree(key:Y value:W left:L right:R) andthen K<Y then {Tree Y W {Insert K V L} R}
+               [] tree(key:Y value:W left:L right:R) andthen K>Y then {Tree Y W L {Insert K V R}}
+               else nil
             end
          end
          fun {Lookup K T}
             case T of nil then nil
-               [] tree(Y V L R) andthen K==Y then V
-               [] tree(Y V L R) andthen K<Y then {Lookup K L}
-               [] tree(Y V L R) andthen K>Y then {Lookup K R}
+               [] tree(key:Y value:V left:L right:R) andthen K==Y then V
+               [] tree(key:Y value:V left:L right:R) andthen K<Y then {Lookup K L}
+               [] tree(key:Y value:V left:L right:R) andthen K>Y then {Lookup K R}
             end
          end
       end
@@ -35,7 +35,7 @@ local  D2 D3 D4 D Val  in
             fun {Domain} 
                proc {DomainD D ?S1 Sn}
                   case D of nil then S1=Sn
-                  [] tree(K _ L R) then 
+                  [] tree(key:K value:_ left:L right:R) then 
                      local S2 S3 in
                         {DomainD L S1 S2}
                         S2=K|S3
@@ -61,7 +61,6 @@ local  D2 D3 D4 D Val  in
       {Browse D2.data}
       {Browse D3.data}
       {Browse Val}
-      {Browse D4.data}
    end
 end
 
