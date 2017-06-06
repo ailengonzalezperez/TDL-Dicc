@@ -31,8 +31,8 @@ local Dicc D2 D3 D4 D Val in
       fun {Put D K V} 
          {Insert K V D}
       end
-      fun {Get D K R} 
-         R = {Lookup K D} 
+      proc {Get D K R} 
+         R = {Lookup K D}          
       end
       fun {Domain D} 
          proc {DomainD D ?S1 Sn}
