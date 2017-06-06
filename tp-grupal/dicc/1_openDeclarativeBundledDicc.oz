@@ -1,6 +1,6 @@
 % OPEN DECLARATIVE BUNDLED
 local  D2 D3 D4 D Val  in
-   local NewDicc DiccObject Insert Lookup in
+   local NewDict DictObject Insert Lookup in
       local Tree in
          fun {Tree K V L R}
             tree(key:K value:V left:L right:R)
@@ -21,16 +21,17 @@ local  D2 D3 D4 D Val  in
                [] tree(key:Y value:V left:L right:R) andthen K==Y then V
                [] tree(key:Y value:V left:L right:R) andthen K<Y then {Lookup K L}
                [] tree(key:Y value:V left:L right:R) andthen K>Y then {Lookup K R}
+               else nil
             end
          end
       end
-      fun {DiccObject D}
+      fun {DictObject D}
          local            
             fun {Put K V} 
-               {DiccObject {Insert K V D}}
+               {DictObject {Insert K V D}}
             end
-            fun {Get K}
-               {Lookup K D}               
+            proc {Get K R} 
+               R = {Lookup K D}          
             end
             fun {Domain} 
                proc {DomainD D ?S1 Sn}
@@ -47,12 +48,12 @@ local  D2 D3 D4 D Val  in
                {DomainD D R nill} R
             end
          in 
-            diccionary(put:Put get:Get domain:Domain data:D)
+            dictionary(put:Put get:Get domain:Domain data:D)
          end
       end
       
-      fun {NewDicc} {DiccObject nil} end   
-      D = {NewDicc}
+      fun {NewDict} {DictObject nil} end   
+      D = {NewDict}
       D2 = {D.put 'a' 4}
       D3 = {D2.put 'b' 10}
       {D3.get 'a' Val}
