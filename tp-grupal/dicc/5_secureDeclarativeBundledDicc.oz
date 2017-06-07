@@ -1,9 +1,9 @@
-% OPEN STATEFUL BUNDLED
-local NewDict D Val Val2 R Tree in 
+% SECURE DECLARATIVE BUNDLED
+local NewDict D2 D3 D Val Tree in
    fun {Tree K V L R}
       tree(key:K value:V left:L right:R)
-   end  
-   fun {NewDict}
+   end
+   local
       fun {Insert K V T}
          case T of nil then {Tree K V nil nil}
             [] tree(key:Y value:W left:L right:R) andthen K==Y then 
@@ -23,39 +23,32 @@ local NewDict D Val Val2 R Tree in
             else nil
          end
       end
-      C = {NewCell nil}
-      proc {Put K V} 
-         C:={Insert K V @C}
-      end
-      proc {Get K V} 
-         V = {Lookup K @C} 
-      end
-      fun {Domain} 
-         nil
+      fun {DictOps D}
+        	fun {Put K V} 
+            {DictOps {Insert K V D}} 
+         end
+        	proc {Get K R}
+   	     R = {Lookup K D} 
+         end
+   	   fun {Domain} 
+            nil 
+         end
+      in 
+         dictionary(put:Put get:Get domain:Domain) 
       end
    in
-      dictionary(put:Put get:Get domain:Domain data:C)
+      fun {NewDict} 
+         {DictOps nil}
+      end
    end
-   
    D = {NewDict}
-   R = D.data
-   {Browse @R}
-   {D.put 'a' 4}
-   {Browse @R}
-   {D.put 'b' 10}
-   {Browse @R}
-   {D.get 'a' Val}
+   D2 = {D.put 'a' 4}
+   D3 = {D2.put 'b' 10}
+   {D3.get 'a' Val}
+   {Browse D}
+   {Browse D2}
+   {Browse D3}
    {Browse Val}
-   try
-      skip
-      R:= {Tree 'c' 15 @R nil}
-      {Browse @R}
-      {D.get 'c' Val2}
-      {Browse Val2}
-   catch Exc then
-      {Browse Exc}
-   end
 end
-
 
 
