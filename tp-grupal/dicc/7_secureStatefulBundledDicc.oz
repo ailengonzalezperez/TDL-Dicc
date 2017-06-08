@@ -33,8 +33,63 @@ local NewDict D Val Val2 in
       proc {Get K R} 
          R = {Lookup K @C} 
       end
-      fun {Domain} 
-         nil 
+      fun {Domain}
+         fun {Length L}
+            case L of nil then 0
+            [] H|T then 1+{Length T}
+            else 1
+            end
+         end   
+         fun {Compare A B}
+            case A of keydata(key:K value_length:V) then
+               case B of keydata(key:L value_length:U) andthen U>V then true
+               [] keydata(key:K value_length:U) andthen U<V then false
+               else false
+               end
+            else nil
+            end
+         end
+         fun {OrderAux Max ListAux Accumulated Return}
+            local Aux in
+               case ListAux of nil then 
+                  Return = Accumulated
+                  Aux = Max
+               [] H|T then
+                  if ({Compare Max H}) then
+                     Aux = {OrderAux H T Max|Accumulated Return}                           
+                  else 
+                     Aux = {OrderAux Max T H|Accumulated Return}
+                  end
+               else 
+                  Aux = nil
+               end
+               Aux
+            end
+         end
+         fun {Order L}  
+            local R in              
+               case L of nil then nil
+               [] H|T then
+                  {OrderAux H T nil ?R}|{Order R} 
+               else nil
+               end                     
+            end
+         end
+         proc {DomainD D ?S1 Sn}
+            case D of nil then S1=Sn
+            [] tree(key:K value:V left:L right:R) then 
+               local S2 S3 in
+                  {DomainD L S1 S2}
+                  S2=keydata(key:K value_length:{Length V})|S3
+                  {DomainD R S3 Sn}
+               end
+            else
+               skip
+            end
+         end R
+      in 
+         {DomainD @C R nil}
+         {Order R}
       end
    in
       dictionary(put:Put get:Get domain:Domain)
@@ -49,6 +104,8 @@ local NewDict D Val Val2 in
    {D.get 'a' Val}
    {Browse Val}
    {Browse D}
+   {D.put 'b' 55}
+   {Browse {D.domain}}
 end
 
 
